@@ -1,8 +1,10 @@
+import Layout from "../../Components/Layout";
+
 function MyOders() {
     return (
-        <div className="bg-red-100">
+        <Layout>
             MyOders
-        </div>
+        </Layout>
     );
 }
 
