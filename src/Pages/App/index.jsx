@@ -7,6 +7,7 @@ import MyOders from "../MyOrders";
 import NotFound from "../NotFound";
 import Signin from "../Signin";
 import { Navbar } from '../../Components/Navbar';
+import CheckoutSideMenu from '../../Components/CheckoutSideMenu';
 
 import "../../App.css";
 
@@ -29,6 +30,7 @@ const App = () => {
             <BrowserRouter>
                 <AppRoutes />
                 <Navbar />
+                <CheckoutSideMenu />
             </BrowserRouter>
         </ShoppingCartProvider>
     );
