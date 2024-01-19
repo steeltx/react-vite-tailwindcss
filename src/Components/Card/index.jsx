@@ -17,11 +17,11 @@ const Card = ( data ) => {
         event.stopPropagation();
         context.setCount(context.count + 1);
         // tomar los datos que ya estaban y agregar un nuevo elemento
-        context.setCartProducts([context.cartProducts, productData]);
-        // cerrar el detalle del producto en caso de que este abierto
-        context.closeProductDetail();
+        context.setCartProducts([...context.cartProducts, productData]);
         // abrir el carrito
         context.openCheckoutSideMenu();
+        // cerrar el detalle del producto en caso de que este abierto
+        context.closeProductDetail();
     }
 
     return (
