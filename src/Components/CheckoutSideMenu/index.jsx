@@ -1,12 +1,23 @@
 import { useContext } from "react";
+import { ToastContainer, toast } from 'react-toastify';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { ShoppingCartContext } from "../../Context";
 import OrderCard from '../OrderCard';
+import 'react-toastify/dist/ReactToastify.css';
 import './styles.css';
 
 const CheckoutSideMenu = () => {
     
     const context = useContext(ShoppingCartContext);
+
+    // eliminar del carrito un producto
+    const handleDelete = id => {
+        // regresar la lista menos el que coincida con el id
+        const filteredProducts = context.cartProducts.filter(product => product.id != id);
+        context.setCartProducts(filteredProducts);
+        // mostrar un mensaje al usuario
+        toast.error("Producto eliminado correctamente");
+    }
 
     return (
         <aside className={`${context.isCheckoutSideMenuOpen ? 'flex' : 'hidden'} checkout-slide-menu flex-col fixed right-0 border border-black rounded bg-white`}>
@@ -19,12 +30,15 @@ const CheckoutSideMenu = () => {
                     context.cartProducts.map(product => (
                         <OrderCard
                             key={product.title}
+                            id={product.id}
                             title={product.title}
                             imageURL={product.images}
                             price={product.price}
+                            handleDelete = {handleDelete}
                         />
                     ))
                 }
+                <ToastContainer position="bottom-center" autoClose={2500} transition: Zoom stacked/>
             </div>
         </aside>
     )
