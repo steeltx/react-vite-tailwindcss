@@ -4,6 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import { ShoppingCartContext } from "../../Context";
 import OrderCard from '../OrderCard';
 import 'react-toastify/dist/ReactToastify.css';
+import { totalPrice } from "../../Utils";
 import './styles.css';
 
 const CheckoutSideMenu = () => {
@@ -41,6 +42,12 @@ const CheckoutSideMenu = () => {
                     ))
                 }
                 <ToastContainer position="bottom-center" autoClose={2500} transition: Zoom stacked/>
+            </div>
+            <div className='px-6'>
+                <p className='flex justify-between items-center'>
+                    <span className='font-medium'>Total :</span>
+                    <span className='font-bold text-xl'>${ totalPrice(context.cartProducts) }</span>
+                </p>
             </div>
         </aside>
     )
