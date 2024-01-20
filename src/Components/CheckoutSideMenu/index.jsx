@@ -17,6 +17,8 @@ const CheckoutSideMenu = () => {
         context.setCartProducts(filteredProducts);
         // mostrar un mensaje al usuario
         toast.error("Producto eliminado correctamente");
+        //restar del contador general
+        context.setCount(context.count - 1);
     }
 
     return (
