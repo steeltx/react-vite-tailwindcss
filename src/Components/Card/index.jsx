@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CheckIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, PlusIcon, XCircleIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { ShoppingCartContext } from "../../Context";
 import { validarURL } from "../../Utils";
 
@@ -11,6 +11,7 @@ const Card = ( data ) => {
         context.openProductDetail();
         // enviar al contexto el objeto del producto
         context.setProductToShow(productDetail);
+        context.closeCheckoutSideMenu();
     }
 
     const addProductsToCart = ( event, productData ) => {
@@ -25,15 +26,30 @@ const Card = ( data ) => {
         context.closeProductDetail();
     }
 
+    // eliminar del carrito un producto
+    const handleDelete = id => {
+        // regresar la lista menos el que coincida con el id
+        const filteredProducts = context.cartProducts.filter(product => product.id != id);
+        context.setCartProducts(filteredProducts);
+        //restar del contador general
+        context.setCount(context.count - 1);
+    }
+
     // si existe en carrito, se muestra en check, sino, + para agregar
     const renderIcon = ( id ) => {
         const isInCart = context.cartProducts.filter(product => product.id === id).length > 0;
         if(isInCart){
             return (
-                <div 
-                    className='absolute top-0 right-0 flex justify-center items-center w-6 h-6 rounded-full m-2 p-1 bg-green-500'>
-                    <CheckIcon className="h-6 w-6 text-white" />
-                </div>
+                <>
+                    <div 
+                        className='absolute top-0 right-0 flex justify-center items-center w-6 h-6 rounded-full m-2 p-1 bg-green-500'>
+                        <CheckIcon className="h-6 w-6 text-white" />
+                    </div>
+                    <div 
+                        className='absolute top-0 left-0 flex justify-center items-center w-6 h-6 rounded-full m-2 p-1 bg-red-500'>
+                        <XMarkIcon onClick={ () => handleDelete(id) } className="h-6 w-6 text-white" />
+                    </div>
+                </>
             )
         }
         return (

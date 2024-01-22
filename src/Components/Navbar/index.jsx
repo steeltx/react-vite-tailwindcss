@@ -89,7 +89,7 @@ export const Navbar = () => {
                         Sign In
                     </NavLink>
                 </li>
-                <li className='flex items-center'>
+                <li className='flex items-center' onClick={ () => context.openCheckoutSideMenu() }>
                     <ShoppingBagIcon className="h-6 w-6 text-black" /> 
                     <div>
                         {context.cartProducts.length}
