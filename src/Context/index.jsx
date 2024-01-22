@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 // se crea un nuevo contexto
 export const ShoppingCartContext = createContext();
@@ -27,6 +27,30 @@ export const ShoppingCartProvider = ( { children } ) => {
     // carrito - orden
     const [ order, setOrder ] = useState([]);
 
+    // obtener productos
+    const [items, setItems] = useState(null);
+    const [filteredItems, setFilteredItems] = useState(null);
+
+    // obtener productos por titulo
+    const [ searchByTitle, setSearchByTitle ] = useState(null);
+
+    // llamado de API
+    useEffect(() => {
+        fetch('https://api.escuelajs.co/api/v1/products')
+            .then(response  => response.json())
+            .then(data => setItems(data))
+    },[]);
+
+    const filteredItemsByTitle = (items, searchByTitle) => {
+        return items?.filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
+    }
+
+    useEffect(() => {
+        // si se realiza una busqueda, establecer los elementos filtrados
+        if(searchByTitle) setFilteredItems(filteredItemsByTitle(items,searchByTitle));
+    },[items, searchByTitle]);
+
+
     return (
         <ShoppingCartContext.Provider value={{
             count,
@@ -42,7 +66,12 @@ export const ShoppingCartProvider = ( { children } ) => {
             openCheckoutSideMenu,
             closeCheckoutSideMenu,
             order,
-            setOrder
+            setOrder,
+            items,
+            setItems,
+            searchByTitle,
+            setSearchByTitle,
+            filteredItems
         }}>
             {children}
         </ShoppingCartContext.Provider>
