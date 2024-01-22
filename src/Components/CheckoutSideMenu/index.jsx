@@ -41,6 +41,7 @@ const CheckoutSideMenu = () => {
         context.setCount(0);
         toast.info("Checkout realizado correctamente");
         context.closeCheckoutSideMenu();
+        context.setSearchByTitle(null);
     }
 
     return (
