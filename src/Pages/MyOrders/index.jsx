@@ -4,7 +4,7 @@ import { ShoppingCartContext } from "../../Context";
 import Layout from "../../Components/Layout";
 import OrdersCard from "../../Components/OrdersCard";
 
-function MyOders() {
+function MyOrders() {
 
     const context = useContext(ShoppingCartContext);
 
@@ -27,4 +27,4 @@ function MyOders() {
     );
 }
 
-export default MyOders;
+export default MyOrders;
