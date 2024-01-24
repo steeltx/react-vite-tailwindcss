@@ -7,6 +7,72 @@ export const Navbar = () => {
     const context = useContext(ShoppingCartContext);
     const activeStyle = 'underline underline-offset-4';
 
+    // Obtener la informacion para signOut
+    const signOut = localStorage.getItem('sign-out');
+    const parsedSignOut = JSON.parse(signOut);
+    const isSignOut = context.signOut || parsedSignOut;
+
+    const handleSignOut = () => {
+        const stringSignOut = JSON.stringify(true);
+        // almacenar el valor en LS
+        localStorage.setItem('sign-out', stringSignOut);
+        context.setSignOut(true);
+    }
+
+    const renderView = () => {
+        // en caso de que no exista la sesion
+        if(isSignOut){
+            return (
+                <li>
+                    <NavLink
+                        to='/sign-in'
+                        className={({isActive}) => isActive ? activeStyle : undefined }
+                        onClick={() => handleSignOut()}
+                    >
+                        Sign In
+                    </NavLink>
+                </li>
+            )
+        }else{
+            // si existe sesion, mostrar el menu completo
+            return (
+                    <>
+                    <li className='text-black/60'>
+                        correo@ejemplo.com
+                    </li>
+                    <li>
+                        <NavLink to='/my-orders'
+                            className={({isActive}) => isActive ? activeStyle : undefined }
+                            >
+                            My Orders
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to='/my-account'
+                            className={({isActive}) => isActive ? activeStyle : undefined }
+                            >
+                            My Account
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to='/sign-in'
+                            className={({isActive}) => isActive ? activeStyle : undefined }
+                            onClick={ () => handleSignOut()}
+                            >
+                            Sign Out
+                        </NavLink>
+                    </li>
+                    <li className='flex items-center' onClick={ () => context.openCheckoutSideMenu() }>
+                        <ShoppingBagIcon className="h-6 w-6 text-black" /> 
+                        <div>
+                            {context.cartProducts.length}
+                        </div>
+                    </li>
+                </>
+            )
+        }
+    }
+
     return (
         <nav className='flex justify-between items-center fixed z-10 top-0 w-full py-5 px-8 text-sm font-light bg-white'>
             <ul className='flex items-center gap-3'>
@@ -65,36 +131,7 @@ export const Navbar = () => {
                 </li>
             </ul>
             <ul className='flex items-center gap-3'>
-                <li className='text-black/60'>
-                    correo@ejemplo.com
-                </li>
-                <li>
-                    <NavLink to='/my-orders'
-                        className={({isActive}) => isActive ? activeStyle : undefined }
-                        >
-                        My Orders
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to='/my-account'
-                        className={({isActive}) => isActive ? activeStyle : undefined }
-                        >
-                        My Account
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to='/sign-in'
-                        className={({isActive}) => isActive ? activeStyle : undefined }
-                        >
-                        Sign In
-                    </NavLink>
-                </li>
-                <li className='flex items-center' onClick={ () => context.openCheckoutSideMenu() }>
-                    <ShoppingBagIcon className="h-6 w-6 text-black" /> 
-                    <div>
-                        {context.cartProducts.length}
-                    </div>
-                </li>
+                { renderView() }
             </ul>
         </nav>
     )

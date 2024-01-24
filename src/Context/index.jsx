@@ -3,7 +3,43 @@ import { createContext, useState, useEffect } from "react";
 // se crea un nuevo contexto
 export const ShoppingCartContext = createContext();
 
+export const inicializarLocalStorage = () => {
+
+    // obtener los valores que se encuentran almacenados en local storage
+    const accountLS = localStorage.getItem('account');
+    const signOutLS = localStorage.getItem('sign-out');
+
+    let parsedAccount;
+    let parsedSignOut;
+
+    // si no existe informacion de la cuenta en LS, setear vacio
+    if(!accountLS){
+        localStorage.setItem('account', JSON.stringify({}));
+        parsedAccount = {};
+    } 
+    // si hay datos, traerlos y parsearlos con JSON
+    else {
+        parsedAccount = JSON.parse(accountLS);
+    }
+
+    // si no inicio sesion, establecer como falso
+    if(!signOutLS){
+        localStorage.setItem('sign-out', JSON.stringify(false));
+        parsedSignOut = {};
+    }
+    // si hay datos, traerlos y parsearlos con JSON
+    else {
+        parsedSignOut = JSON.parse(signOutLS);
+    }
+}
+
 export const ShoppingCartProvider = ( { children } ) => {
+
+    // Cuenta
+    const [account, setAccount] = useState({});
+    
+    // Sesion
+    const [signOut, setSignOut] = useState(false);
 
     // Carrito - Cantidades
     const [count, setCount] = useState(0);
@@ -96,7 +132,11 @@ export const ShoppingCartProvider = ( { children } ) => {
             setSearchByTitle,
             filteredItems,
             searchByCategory,
-            setSearchByCategory
+            setSearchByCategory,
+            account,
+            setAccount,
+            signOut,
+            setSignOut
         }}>
             {children}
         </ShoppingCartContext.Provider>
