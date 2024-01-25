@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useRef, useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import Layout from "../../Components/Layout";
 import { ShoppingCartContext } from '../../Context';
 
@@ -8,6 +8,7 @@ function Signin() {
     const context = useContext(ShoppingCartContext);
     // crear el estado local para verificar que vista mostrar
     const [view, setView] = useState('user-info');
+    const form = useRef(null);
 
     // leer la informacion de la cuenta
     const account = localStorage.getItem('account');
@@ -17,6 +18,29 @@ function Signin() {
     const noAccountLS = parsedAccount ? Object.keys(parsedAccount).length === 0 : true;
     const noAccountState = context.account ? Object.keys(context.account).length === 0 : true;
     const hasUserAccount = !noAccountLS || !noAccountState;
+
+    const handleSignIn = () => {
+        // indicar que no esta fuera de la sesion
+        const stringSignOut = JSON.stringify(false);
+        localStorage.setItem('sign-out', stringSignOut);
+        context.setSignOut(false);
+        // redireccionar
+        return <Navigate replace to={'/'} />
+    }
+
+    const createAccount = () => {
+        const formData = new FormData(form.current);
+        const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            password: formData.get('password')
+        }
+        // crea la cuenta del usuario
+        const stringAccount = JSON.stringify(data);
+        localStorage.setItem('account', stringAccount);
+        context.setAccount(data);
+        handleSignIn();
+    }
 
     const renderLogin = () => {
         return (
@@ -33,6 +57,7 @@ function Signin() {
                     <button 
                         className='bg-green-700 text-white w-full rounded-lg py-3 mt-6 mb-6 disabled:bg-green-700/40'
                         disabled={!hasUserAccount}
+                        onClick={ () => handleSignIn() }
                         >
                         Log in
                     </button>
@@ -52,7 +77,47 @@ function Signin() {
     }
 
     const renderCreateUser = () => {
-
+        return (
+            <form ref={form} className='flex flex-col gap-4 w-80'>
+                <div className='flex flex-col gap-1'>
+                    <label htmlFor='name' className='font-medium text-sm'>Name</label>
+                    <input type='text' id='name' name='name'
+                        defaultValue={parsedAccount?.name}
+                        placeholder='Name'
+                        className='rounded-lg border border-black placeholder:font-light placeholder:text-sm placeholder:text-green-700/60 focus:outline-none py-2 px-2'
+                    />
+                </div>
+                <div className='flex flex-col gap-1'>
+                    <label htmlFor='email' className='font-light text-sm'>Email</label>
+                    <input 
+                        type='text' 
+                        id='email'
+                        name='email'
+                        defaultValue={parsedAccount?.email}
+                        placeholder='email@example.com'
+                        className='rounded-lg border border-black placeholder:font-light placeholder:text-sm placeholder:text-green-700/60 focus:outline-none py-2 px-2'
+                    />
+                </div>
+                <div className='flex flex-col gap-1'>
+                    <label htmlFor='password' className='font-light text-sm'>Email</label>
+                    <input 
+                        type='password' 
+                        id='password'
+                        name='password'
+                        defaultValue={parsedAccount?.email}
+                        placeholder='*****'
+                        className='rounded-lg border border-black placeholder:font-light placeholder:text-sm placeholder:text-green-700/60 focus:outline-none py-2 px-2'
+                    />
+                </div>
+                <Link to='/'>
+                    <button className='bg-green-700 text-white w-full rounded-lg py-3'
+                        onClick={() => createAccount()}
+                    >
+                        Create
+                    </button>
+                </Link>
+            </form>
+        )
     }
 
     // evaluar si se muestra el login o la creacion del usuario de acuerdo al valor de view
