@@ -45,13 +45,13 @@ function Signin() {
     const renderLogin = () => {
         return (
             <div className='flex flex-col w-80'>
-                <p>
-                    <span className='font-light text-sm'>Email: </span>
+                <p className='justify-between flex'>
+                    <span className='font-bold text-sm'>Email: </span>
                     <span>{parsedAccount?.email}</span>
                 </p>
-                <p className='mt-2'>
-                    <span className='font-light text-sm'>Password: </span>
-                    <span>{parsedAccount?.password}</span>
+                <p className='mt-2 justify-between flex'>
+                    <span className='font-bold text-sm'>Name: </span>
+                    <span>{parsedAccount?.name}</span>
                 </p>
                 <Link to='/'>
                     <button 
@@ -99,7 +99,7 @@ function Signin() {
                     />
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <label htmlFor='password' className='font-light text-sm'>Email</label>
+                    <label htmlFor='password' className='font-light text-sm'>Password</label>
                     <input 
                         type='password' 
                         id='password'
@@ -125,7 +125,7 @@ function Signin() {
 
     return (
         <Layout>
-            <h1 className='font-bold text-xl mb-6 w-80 text-center text-green-700'> Welcome</h1>
+            <h1 className='font-bold text-xl mb-6 w-80 text-center text-green-700'> Welcome to Shopi</h1>
             {renderView()}
         </Layout>
     );
